@@ -11,18 +11,7 @@ namespace Game.PlayerScripts
             _animator = GetComponent<Animator>();
         }
 
-        public void MoveForward(float k)
-        {
-            _animator.SetFloat("y", k);
-        }
-
-        public void MoveBack(float k)
-        {
-            
-            _animator.SetFloat("y", k);
-        }
-
-        public void MoveNull(float k)
+        public void Move(float k)
         {
             _animator.SetFloat("y", k);
         }

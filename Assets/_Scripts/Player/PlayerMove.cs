@@ -28,21 +28,22 @@ namespace Game.PlayerScripts
                 _timeY += Time.deltaTime * 2f;
                 _timeY = Mathf.Clamp(_timeY, 0f, 1f);
 
-                transform.position += cameraDirection * _speed * Time.deltaTime;
-                _playerControllerAnim.MoveForward(_animationCurve.Evaluate(_timeY));
+                transform.position += cameraDirection * _speed * _animationCurve.Evaluate(_timeY) * Time.deltaTime;
+                TurnBody(_cameraTransform.rotation);
+                _playerControllerAnim.Move(_animationCurve.Evaluate(_timeY));
             }
             else if (Input.GetKey(KeyCode.S))
             {
                 _timeY -= Time.deltaTime * 2f;
                 _timeY = Mathf.Clamp(_timeY, -1f, 0f);
 
-                transform.position -= cameraDirection * _speed * Time.deltaTime;
-                _playerControllerAnim.MoveBack(-_animationCurve.Evaluate(_timeY * -1f));
+                transform.position -= cameraDirection * _speed * _animationCurve.Evaluate(_timeY * -1f) * Time.deltaTime;
+                _playerControllerAnim.Move(-_animationCurve.Evaluate(_timeY * -1f));
             }
             else
             {
                 _timeY = Mathf.Lerp(_timeY, 0, Time.deltaTime * 2f);
-                _playerControllerAnim.MoveNull(_timeY);
+                _playerControllerAnim.Move(_timeY);
             }
 
             Vector3 directionLeft = Vector3.Cross(cameraDirection, Vector3.up);
@@ -52,7 +53,7 @@ namespace Game.PlayerScripts
                 _timeX -= Time.deltaTime * 4f;
                 _timeX = Mathf.Clamp(_timeX, -1f, 0f);
 
-                transform.position += directionLeft * _speed * Time.deltaTime;
+                transform.position += directionLeft * _speed * _animationCurve.Evaluate(_timeX * -1f) * Time.deltaTime;
                 _playerControllerAnim.Turn(-_animationCurve.Evaluate(_timeX * -1f));
             }
             else if (Input.GetKey(KeyCode.D))
@@ -60,7 +61,7 @@ namespace Game.PlayerScripts
                 _timeX += Time.deltaTime * 4f;
                 _timeX = Mathf.Clamp(_timeX, 0f, 1f);
 
-                transform.position -= directionLeft * _speed * Time.deltaTime;
+                transform.position -= directionLeft * _speed * _animationCurve.Evaluate(_timeX) * Time.deltaTime;
                 _playerControllerAnim.Turn(_animationCurve.Evaluate(_timeX));
             }
             else
@@ -68,6 +69,14 @@ namespace Game.PlayerScripts
                 _timeX = Mathf.Lerp(_timeX, 0, Time.deltaTime * 4f);
                 _playerControllerAnim.Turn(_timeX);
             }
+        }
+
+        private void TurnBody(Quaternion cameraQuaternion)
+        {
+            cameraQuaternion.x = 0;
+            cameraQuaternion.z = 0;
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, cameraQuaternion, Time.deltaTime * 5f);
         }
     }
 }
