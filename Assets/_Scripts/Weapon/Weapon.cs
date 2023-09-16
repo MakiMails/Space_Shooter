@@ -7,6 +7,7 @@ namespace Game.WeaponScripts
         [SerializeField] private float _damage;
         [SerializeField, Min(1)] private int _maxCountCartridge = 1;
         [SerializeField, Min(0)] private int _countCartridge = 0;
+        [SerializeField, Min(0)] private int _countCartridgeInStock = 0;
 
         public int CountCartrige
         {
